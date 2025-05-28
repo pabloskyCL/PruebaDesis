@@ -1,0 +1,75 @@
+<?php
+
+namespace app\models;
+
+use app\Excepciones\CheckDatabaseError;
+
+class Producto
+{
+    private $db;
+
+    public function __construct()
+    {
+        $this->db = new \Database();
+    }
+
+    public function nuevoProducto($data)
+    {
+        $this->db->initTransaction();
+        try {
+            $this->db->query('INSERT INTO producto (codigo,nombre,moneda_id,precio,descripcion,materiales)
+                 VALUES (:codigo, :nombre,:moneda_id,:precio,:descripcion,:materiales)');
+            $this->db->bind(':codigo', $data['codigo']);
+            $this->db->bind(':nombre', $data['nombre']);
+            $this->db->bind(':moneda_id', $data['moneda']);
+            $this->db->bind(':precio', $data['precio']);
+            $this->db->bind(':descripcion', $data['descripcion']);
+            '' === $this->db->bind(':materiales', $data['materiales']) ? null : $data['materiales'];
+            $this->db->execute();
+
+            $this->db->query('INSERT INTO producto_sucursal (producto_id,sucursal_id)
+                 VALUES (:producto_id, :sucursal_id)');
+            $this->db->bind(':producto_id', $data['codigo']);
+            $this->db->bind(':sucursal_id', $data['sucursal']);
+        } catch (\PDOException $th) {
+            $this->db->cancelTransaction();
+
+            return CheckDatabaseError::checkCreateProductException($th);
+            // if ('23502' == $th->getCode()) {
+            //     // si el codigo es 23502, es por que hay un campo obligatorio que no ha sido enviado"
+            //     // se obtiene la columna asociada al error
+            //     preg_match('/columna «([a-zA-Z0-9_]+)»/', $th->getMessage(), $matches);
+            //     if (isset($matches[1])) {
+            //         $column = $matches[1];
+            //     }
+
+            //     return [
+            //     'error' => 'El campo '.$column.' es obligatorio',
+            //     'code' => $th->getCode(),
+            //     'column' => $column,
+            // ];
+            // }
+
+            // if('23505' == $th->getCode()){
+            //     return [
+            //         'error' => 'El codigo ya existe',
+            //         'code' => $th->getCode(),
+            //         'column' => $column,
+            //     ];
+            // }
+
+            // return [
+            //     'error' => 'Error al insertar el producto',
+            //     'code' => $th->getCode(),
+            //     'trace' => $th->errorInfo,
+            //     'column' => $column,
+            //     'data' => $data,
+            // ];
+        }
+
+        $this->db->execute();
+        $this->db->endTransaction();
+
+        return ['success' => 'Producto insertado correctamente'];
+    }
+}
