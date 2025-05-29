@@ -35,36 +35,6 @@ class Producto
             $this->db->cancelTransaction();
 
             return CheckDatabaseError::checkCreateProductException($th);
-            // if ('23502' == $th->getCode()) {
-            //     // si el codigo es 23502, es por que hay un campo obligatorio que no ha sido enviado"
-            //     // se obtiene la columna asociada al error
-            //     preg_match('/columna «([a-zA-Z0-9_]+)»/', $th->getMessage(), $matches);
-            //     if (isset($matches[1])) {
-            //         $column = $matches[1];
-            //     }
-
-            //     return [
-            //     'error' => 'El campo '.$column.' es obligatorio',
-            //     'code' => $th->getCode(),
-            //     'column' => $column,
-            // ];
-            // }
-
-            // if('23505' == $th->getCode()){
-            //     return [
-            //         'error' => 'El codigo ya existe',
-            //         'code' => $th->getCode(),
-            //         'column' => $column,
-            //     ];
-            // }
-
-            // return [
-            //     'error' => 'Error al insertar el producto',
-            //     'code' => $th->getCode(),
-            //     'trace' => $th->errorInfo,
-            //     'column' => $column,
-            //     'data' => $data,
-            // ];
         }
 
         $this->db->execute();
