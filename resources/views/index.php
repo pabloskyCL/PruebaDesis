@@ -24,7 +24,7 @@ use app\Http\URL;
           </div>
           <div class="form-group">
             <label for="nombre">Nombre</label>
-            <input type="text" id="nombre" name="nombre">
+            <input type="text" title="Ingresar el nombre completo del producto, asegurándose de que sea claro y descriptivo" id="nombre" name="nombre">
           </div>
         </div>
         
