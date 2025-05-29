@@ -15,7 +15,7 @@ use app\Http\URL;
 <body>
 <div class="container">
       <form id="registro-producto" class="product-form">
-          <h2>Formulario de Producto</h2>
+          <h1>Formulario de Producto</h1>
         
           <div class="form-row">
           <div class="form-group">
@@ -90,9 +90,9 @@ use app\Http\URL;
             let bodega = document.getElementById('bodega');
             let sucursales = document.getElementById('sucursales');
             
+            // obtiene las sucursales sugún la bodega seleccionada
             bodega.addEventListener('change', getSucursales);
 
-            // obtiene las sucursales sugún la bodega seleccionada
             
             // valida los datos del formulario y lo envia
             formulario.addEventListener('submit', enviarFormulario);
