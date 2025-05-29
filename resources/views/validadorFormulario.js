@@ -47,8 +47,10 @@ function enviarFormulario(event) {
         }
 
         if (data.code == 201) {
-            alert('Producto insertado correctamente');
+            alert('Producto creado correctamente');
             formulario.reset();
+            sucursales.options.length = 0;
+            sucursales.add(new Option('', 'none'));
             return;
         }
 
@@ -74,38 +76,45 @@ function validarFormulario(formulario) {
         return acc;
     }, 0);
 
-    if (formulario.get('codigo') == '') {
-        alert('el codigo es obligatorio');
+    let codigo = formulario.get('codigo');
+
+    if (codigo == '') {
+        alert('El código del producto no puede estar en blanco.');
         return false;
     }
 
-    if (!validarCodigo(formulario.get('codigo'))) {
-        alert('el codigo debe tener solo caracteres y tener una longitud minima de 5 caracteres y maxima de 15');
+    if (!validarFormatoCodigo(codigo)) {
+        alert('El código del producto debe contener letras y números');
+        return false;
+    }
+
+    if (!validarLargoCodigo(codigo)) {
+        alert('El código del producto debe tener entre 5 y 15 caracteres');
         return false;
     }
 
     if (formulario.get('nombre') == '') {
-        alert('el nombre es obligatorio');
+        alert('El nombre del producto no puede estar en blanco');
         return false;
     }
 
     if (!validarNombre(formulario.get('nombre'))) {
-        alert('el nombre debe tener solo caracteres y tener una longitud minima de 2 caracteres y maxima de 50');
+        alert('El nombre del producto debe tener entre 2 y 50 caracteres.');
         return false;
     }
 
     if (formulario.get('bodega') == 'none') {
-        alert('debe seleccionar una bodega');
+        alert('Debe seleccionar una bodega.');
         return false;
     }
 
     if (formulario.get('sucursal') == 'none') {
-        alert('debe seleccionar una sucursal');
+        alert('Debe seleccionar una sucursal para la bodega seleccionada.');
         return false;
     }
 
     if (formulario.get('moneda') == 'none') {
-        alert('debe seleccionar una moneda');
+        alert('El precio del producto no puede estar en blanco.');
         return false;
     }
 
@@ -115,21 +124,21 @@ function validarFormulario(formulario) {
     }
 
     if (!validarPrecio(formulario.get('precio'))) {
-        alert('el precio debe ser un numero y tener maximo 2 decimales');
+        alert('El precio del producto debe ser un número positivo con hasta dos decimales.');
         return false;
     }
     if (countchecked < 2) {
-        alert('debe seleccionar al menos 2 materiales');
+        alert('Debe seleccionar al menos dos materiales para el producto.');
         return;
     }
 
     if (formulario.get('descripcion') == '') {
-        alert('la descripcion es obligatoria');
+        alert('La descripción del producto no puede estar en blanco.');
         return false;
     }
 
     if (!validarDescripcion(formulario.get('descripcion'))) {
-        alert('la descripcion debe tener una longitud minima de 10 caracteres y maxima de 1000');
+        alert('La descripción del producto debe tener entre 10 y 1000 caracteres.');
         return false;
     }
 
@@ -138,13 +147,18 @@ function validarFormulario(formulario) {
 }
 
 
-function validarCodigo(codigo) {
-    const regex = /^[a-zA-Z0-9]{5,15}$/;
+function validarLargoCodigo(codigo) {
+    const regex = /^.{5,15}$/;
+    return regex.test(codigo);
+}
+
+function validarFormatoCodigo(codigo) {
+    const regex = /^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]+$/;
     return regex.test(codigo);
 }
 
 function validarNombre(nombre) {
-    const regex = /^[a-zA-Z0-9 ]{2,50}$/;
+    const regex = /^.{2,50}$/;
     return regex.test(nombre);
 }
 
