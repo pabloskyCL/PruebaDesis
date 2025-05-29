@@ -59,7 +59,7 @@ class ProductoController extends Controller
         $result = $producto->nuevoProducto($crearProductoDto);
         header('Content-Type: application/json');
         if (isset($result['error'])) {
-            $response = new Response(500, EMessages::ERROR);
+            $response = new Response(400, EMessages::ERROR);
             $response->setData($result);
             echo $response->json();
 
