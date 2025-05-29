@@ -2,30 +2,30 @@ Configuración para levantar proyecto en local en ubuntu:
 
 requisito tener instalado lo siguiente:
 
-- php 8.1
-- mySQL 8.0
+- php 8.4
+- postgresql 14.0
+- pgadmin4
 - extensiones de php
 - apache2
 - activar modulo modprove:
   - sudo a2enmod rewrite
   - sudo systemctl restart apache2
-- pgadmin
 
 para levantar el proyecto primero hay que clonarlo en la carpeta compartida con el servidor web que se indica en la configuración de apache:
 
 después hay que crear una configuración para para apache:
 
-/etc/apache2/sites-available/nombre-de -la configuración.conf
+/etc/apache2/sites-available/nombre-de-la-configuración.conf
 
-debe quedar parecido a esto cambiando los directorio a los que corresponde y el servername puede ser localhost si no se cambia hosts:
+debe quedar parecido a esto cambiando los directorio a los que corresponde y el servername puede debe quedar en desisproducts.local:
 
 ```
 <VirtualHost *:80>
-    ServerAdmin pabloskiquiroz@gmail.com
-    DocumentRoot /home/pablosky-cl/pruebas_tecnicas/desisproducts
+    ServerAdmin "tu server admin"
+    DocumentRoot "tu carpeta raiz del proyecto" en mi caso /home/pablosky-cl/pruebas_tecnicas/desisproducts
     ServerName desisproducts.local
 
-    <Directory /home/pablosky-cl/pruebas_tecnicas/desisproducts>
+    <Directory "tu carpeta raiz del proyecto">
         Options Indexes FollowSymLinks
         AllowOverride All
         Require all granted
@@ -38,6 +38,8 @@ debe quedar parecido a esto cambiando los directorio a los que corresponde y el 
 ```
 
 - reiniciar apache sudo systemctl restart apache2
+
+agregar el servername a los hosts:
 
 /etc/hosts:
 
@@ -58,10 +60,6 @@ en caso de tener problema de permisos:
 
 sudo chmod -R g+w /home/tu-carpeta-home/tu ruta raiz del proyecto
 
-recordar agregar la pagina a apache2
+modificar archivo Database.php con la información correspondiente a su usuario de postgres a utilizar, el usuario por defecto "postgres" o crear uno nuevo.
 
-modificar archivo Database.php con la información correspondiente a su usuario de mysql que va a utilizar
-
-ingresar a pgadmin y crear la base de datos products hacer click derecho en la base de dato y restaurar desde el archivo backup-1
-
-si hay problemas en buscar el archivo desde pgadmin, favor de mover el archivo a la ubicacion por defecto de almacenamiento de backups de pg admin, que es en linux ubuntu la ruta `/var/lib/pgadmin/storage/'usuario con el que se creo la cuenta'/` una vez agregado el archivo debiese poder hacerse el restore de la base de datos.
+ingresar a pgadmin4 crear servidor y base de datos product abrir consola desde la base de datos products y abrir archivo SQL/backup.sql y ejecutar.
