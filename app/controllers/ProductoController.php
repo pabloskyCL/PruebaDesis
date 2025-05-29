@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\consts\EMessages;
+use app\Dtos\CrearProductoDto;
 use app\Http\Response;
 use app\models\Bodega;
 use app\models\Moneda;
@@ -42,20 +43,20 @@ class ProductoController extends Controller
             return true == $k;
         });
 
-        $data = [
-            'codigo' => $request->codigo,
-            'nombre' => $request->nombre,
-            'bodega' => $request->bodega,
-            'sucursal' => intval($request->sucursal),
-            'materiales' => join(',', array_keys($checked)),
-            'moneda' => intval($request->moneda),
-            'precio' => intval($request->precio),
-            'descripcion' => $request->descripcion,
-        ];
+        $crearProductoDto = new CrearProductoDto(
+            $request->codigo,
+            $request->nombre,
+            $request->bodega,
+            intval($request->sucursal),
+            join(',', array_keys($checked)),
+            intval($request->moneda),
+            intval($request->precio),
+            $request->descripcion,
+        );
 
         $producto = new Producto();
 
-        $result = $producto->nuevoProducto($data);
+        $result = $producto->nuevoProducto($crearProductoDto);
         header('Content-Type: application/json');
         if (isset($result['error'])) {
             $response = new Response(500, EMessages::ERROR);
