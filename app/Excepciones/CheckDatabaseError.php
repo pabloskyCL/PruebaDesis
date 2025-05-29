@@ -27,7 +27,7 @@ class CheckDatabaseError
 
         if ('23505' == $error->getCode()) {
             return [
-                'error' => 'El codigo ya existe',
+                'error' => 'El código del producto ya está registrado.',
                 'code' => $error->getCode(),
             ];
         }
